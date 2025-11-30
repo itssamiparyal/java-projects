@@ -1,0 +1,69 @@
+#Table creation
+
+CREATE TABLE Department (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE Employee (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_name TEXT NOT NULL,
+    age INTEGER CHECK (age >= 18),
+    salary REAL NOT NULL CHECK (salary > 0),
+    email TEXT UNIQUE,
+    dept_id INTEGER NOT NULL,
+    FOREIGN KEY (dept_id) REFERENCES Department(id)
+);
+
+CREATE TABLE Position (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE Employee_Position (
+    emp_id INTEGER,
+    position_id INTEGER,
+    PRIMARY KEY (emp_id, position_id),
+    FOREIGN KEY (emp_id) REFERENCES Employee(id),
+    FOREIGN KEY (position_id) REFERENCES Position(id)
+);
+
+#Data Insert
+
+INSERT INTO Department (name) VALUES ('Marketing');
+INSERT INTO Department (name) VALUES ('IT');
+INSERT INTO Department (name) VALUES ('Finance');
+
+INSERT INTO Employee (emp_name, age, salary, email, dept_id)
+VALUES ('George willinson', 30, 5000, 'George@email.com', 1);
+
+INSERT INTO Employee (emp_name, age, salary, email, dept_id)
+VALUES ('Bob Carlinton', 25, 7500, 'bob@email.com', 2);
+
+INSERT INTO Employee (emp_name, age, salary, email, dept_id)
+VALUES ('Gray Walker', 40, 6000, 'Gray@email.com', 3);
+
+
+INSERT INTO Position (name) VALUES ('Manager');
+INSERT INTO Position (name) VALUES ('Developer');
+INSERT INTO Position (name) VALUES ('Accountant');
+
+
+INSERT INTO Employee_Position (emp_id, position_id) VALUES (1, 1);
+INSERT INTO Employee_Position (emp_id, position_id) VALUES (2, 2);
+INSERT INTO Employee_Position (emp_id, position_id) VALUES (3, 3);
+
+#Select Query to Retrieve all employee's details
+SELECT * FROM Employee;
+
+#Select Query That filters employees based on department name(I Selected from IT field)
+SELECT emp_name, salary  FROM Employee WHERE dept_id = 2;
+
+#Select Query That uses As keyword to rename columns in the result
+SELECT emp_name AS "Employee Name", salary AS "Monthly Salary"  FROM Employee;
+
+#Select query that calculates the total salary expenses of the company
+SELECT SUM(salary) AS "Total Salary Expenses" FROM Employee;
+
+#select query that joins the employee and department tables and retrieves selected columns
+SELECT emp.emp_name, emp.salary, dept.name AS "Department Name" FROM Employee emp JOIN Department dept ON emp.dept_id = dept.id;
